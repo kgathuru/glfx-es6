@@ -1,3 +1,10 @@
+Changed:
+
+* For Typescript, add type definition
+* fix toDataURL()
+
+---
+
 This is a port of [glfx.js by Evan Wallace](http://www.github.com/evanw/glfx.js) to work with modern module importers.  The API is exactly the same.
 
 ### Installation
