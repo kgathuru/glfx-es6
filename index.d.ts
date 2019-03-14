@@ -30,6 +30,7 @@ declare module "glfx-es6" {
     perspective: (before: any, after: any) => GlfxCanvas
     swirl: (centerX: number, centerY: number, radius: number, angle: number) => GlfxCanvas
     update: () => GlfxCanvas
+    replace: (node: any) => GlfxCanvas
   }
 
   function canvas(): GlfxCanvas
