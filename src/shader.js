@@ -32,7 +32,16 @@ export default class Shader {
     this.program = gl.createProgram();
     vertexSource = vertexSource || defaultVertexSource;
     fragmentSource = fragmentSource || defaultFragmentSource;
-    fragmentSource = 'precision mediump float;' + fragmentSource; // annoying requirement is annoying
+    fragmentSource = 'precision highp float;' + fragmentSource; 
+
+    var webGlPrecision = this.precisionSupported();
+    if (webGlPrecision !== 'highp'){
+      fragmentSource = fragmentSource.replace(
+        /precision highp float/g,
+        'precision ' + webGlPrecision + ' float'
+      );
+    }
+
     gl.attachShader(this.program, compileSource(gl.VERTEX_SHADER, vertexSource));
     gl.attachShader(this.program, compileSource(gl.FRAGMENT_SHADER, fragmentSource));
     gl.linkProgram(this.program);
@@ -40,7 +49,36 @@ export default class Shader {
       throw 'link error: ' + gl.getProgramInfoLog(this.program);
     }
   }
-  
+
+  /** check which webgl precision is supported  */
+  precisionSupported() {
+    let canvas = document.createElement('canvas');
+    let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    let supportedPrecision;
+    if (gl) {
+      const precisions = ['highp', 'mediump', 'lowp'];
+      for (let i = 0; i < 3; i++) {
+        if (this.testPrecision(gl, precisions[i])) {
+          supportedPrecision = precisions[i];
+          break;
+        }
+      }
+    }
+    return supportedPrecision;
+  }
+
+  /** test individual precision  */
+  testPrecision(gl, precision) {
+    var fragmentSource = 'precision ' + precision + ' float;\nvoid main(){}';
+    var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fragmentSource);
+    gl.compileShader(fragmentShader);
+    if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+      return false;
+    }
+    return true;
+  }
+
   destroy() {
     var gl = store.get('gl')
     gl.deleteProgram(this.program);
