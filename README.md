@@ -5,7 +5,8 @@ Changed:
 
 ---
 
-This is a port of [glfx.js by Evan Wallace](http://www.github.com/evanw/glfx.js) to work with modern module importers.  The API is exactly the same.
+This is a fork of [glfx-es6 by David McArthur](http://www.github.com/daviestar/glfx-es6) with added bits.
+Glfx-es6 is in turn a port of [glfx.js by Evan Wallace](http://www.github.com/evanw/glfx.js) to work with modern module importers.  The API is exactly the same.
 
 ### Installation
 
